@@ -63,6 +63,31 @@ function extractOutput(data: unknown): string {
   return "Recebi sua mensagem, mas a resposta não chegou inteirinha. Pode repetir?";
 }
 
+const BACKEND_ERROR_MARKERS = [
+  "bad request",
+  "is not supported",
+  "request id:",
+  "please check your parameters",
+  "invalid api key",
+  "unauthorized",
+  "rate limit",
+  "quota",
+  "internal server error",
+  "upstream error",
+  "timed out",
+  "502 bad gateway",
+  "503 service",
+];
+
+const MAINTENANCE_MSG =
+  "O Cafezinho está passando por uma manutenção rápida na cozinha. Tenta de novo em alguns instantes — ou chama a gente pelo Instagram para garantir o pedido.";
+
+/** Detecta quando o webhook devolveu um erro técnico do backend (ex.: modelo/endpoint inválido). */
+function looksLikeBackendError(text: string): boolean {
+  const lower = text.toLowerCase();
+  return BACKEND_ERROR_MARKERS.some((marker) => lower.includes(marker));
+}
+
 function Bubble({ m }: { m: Msg }) {
   const isUser = m.role === "user";
   return (
@@ -155,8 +180,22 @@ export function Cafezinho() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify([{ text, session_id: sessionIdRef.current }]),
         });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        reply = extractOutput(await res.json().catch(() => null));
+
+        if (res.ok) {
+          reply = extractOutput(await res.json().catch(() => null));
+        } else {
+          // O webhook pode devolver o erro técnico no próprio corpo da resposta
+          const errorBody = await res.text().catch(() => "");
+          console.warn(`[Cafezinho] webhook respondeu HTTP ${res.status}:`, errorBody);
+          reply = looksLikeBackendError(errorBody)
+            ? MAINTENANCE_MSG
+            : "Ops, perdi a conexão com a máquina de café… Pode mandar de novo?";
+        }
+
+        if (looksLikeBackendError(reply)) {
+          console.warn("[Cafezinho] resposta do agente parece um erro de backend:", reply);
+          reply = MAINTENANCE_MSG;
+        }
       } catch {
         reply = "Ops, perdi a conexão com a máquina de café… Pode mandar de novo?";
       }
