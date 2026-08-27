@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import ReactMarkdown, { type Components } from "react-markdown";
+import remarkBreaks from "remark-breaks";
+import remarkGfm from "remark-gfm";
 import { CAFEZINHO_WEBHOOK_URL, INSTAGRAM_URL } from "../lib/site";
 import { IconCafezinho, IconSend } from "./Icons";
 
@@ -88,20 +91,71 @@ function looksLikeBackendError(text: string): boolean {
   return BACKEND_ERROR_MARKERS.some((marker) => lower.includes(marker));
 }
 
+/**
+ * Normaliza escapes Markdown gerados indevidamente no pipeline (n8n/agente),
+ * como `\*\*16h11\*\*` → `**16h11**`. Desfaz SOMENTE os escapes de marcadores
+ * de formatação (`\*`, `\_`, backtick) — nunca altera conteúdo legítimo.
+ */
+function normalizeEscapedMarkdown(text: string): string {
+  return text.replace(/\\([*_`])/g, "$1");
+}
+
+/**
+ * Componentes do renderer — mantêm a tipografia e as cores dos balões,
+ * apenas dão semântica/estilo aos elementos Markdown.
+ */
+const markdownComponents: Components = {
+  strong: ({ children }) => <strong className="font-semibold text-inherit">{children}</strong>,
+  em: ({ children }) => <em className="italic">{children}</em>,
+  a: ({ href, children }) => (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="break-words font-semibold text-brass underline decoration-brass/50 underline-offset-2 transition-colors hover:text-brass-soft"
+    >
+      {children}
+    </a>
+  ),
+  ul: ({ children }) => <ul className="list-disc space-y-1 pl-5">{children}</ul>,
+  ol: ({ children }) => <ol className="list-decimal space-y-1 pl-5">{children}</ol>,
+  blockquote: ({ children }) => <blockquote className="border-l-2 border-brass pl-3">{children}</blockquote>,
+  code: ({ children }) => (
+    <code className="rounded bg-espresso/10 px-1 py-0.5 text-[0.92em]">{children}</code>
+  ),
+  h1: ({ children }) => <strong className="block font-semibold">{children}</strong>,
+  h2: ({ children }) => <strong className="block font-semibold">{children}</strong>,
+  h3: ({ children }) => <strong className="block font-semibold">{children}</strong>,
+  h4: ({ children }) => <strong className="block font-semibold">{children}</strong>,
+  h5: ({ children }) => <strong className="block font-semibold">{children}</strong>,
+  h6: ({ children }) => <strong className="block font-semibold">{children}</strong>,
+};
+
+/** Renderiza Markdown apenas nas mensagens do AGENTE (com quebras de linha GFM). */
+function AgentText({ text }: { text: string }) {
+  return (
+    <div className="agent-md [&>*+*]:mt-2">
+      <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} components={markdownComponents}>
+        {normalizeEscapedMarkdown(text)}
+      </ReactMarkdown>
+    </div>
+  );
+}
+
 function Bubble({ m }: { m: Msg }) {
   const isUser = m.role === "user";
   return (
     <div className={`msg-in flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div className={`max-w-[85%] ${isUser ? "text-right" : "text-left"}`}>
-        <p
-          className={`inline-block whitespace-pre-wrap rounded-lg px-4 py-3 text-left text-[14px] leading-relaxed shadow-card ${
+        <div
+          className={`inline-block rounded-lg px-4 py-3 text-left text-[14px] leading-relaxed shadow-card ${
             isUser
-              ? "rounded-br-sm bg-espresso text-parchment"
+              ? "whitespace-pre-wrap rounded-br-sm bg-espresso text-parchment"
               : "rounded-bl-sm bg-cream text-cocoa-deep ring-1 ring-roast/10"
           }`}
         >
-          {m.text}
-        </p>
+          {m.role === "agent" ? <AgentText text={m.text} /> : m.text}
+        </div>
         <span className="mt-1 block px-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-cocoa/70">
           {isUser ? "Você" : "Cafezinho"} · {m.time}
         </span>
