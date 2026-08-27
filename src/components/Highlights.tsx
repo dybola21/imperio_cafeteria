@@ -24,7 +24,7 @@ function HighlightRow({ item, index }: { item: Highlight; index: number }) {
         className={`lg:col-span-7 ${imageLeft ? "" : "lg:order-2"}`}
       >
         <figure className="group relative overflow-hidden rounded-lg shadow-deep ring-1 ring-espresso/10">
-          <div className="aspect-[4/5] max-h-[620px] w-full overflow-hidden sm:aspect-[5/5] lg:aspect-[6/5.4]">
+          <div className="aspect-[4/5] max-h-[620px] w-full overflow-hidden bg-mocha sm:aspect-[5/5] lg:aspect-[6/5.4]">
             <img
               src={item.img.src}
               alt={item.img.alt}

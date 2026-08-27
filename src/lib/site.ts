@@ -27,23 +27,23 @@ export const MAP_EMBED_URL = `https://www.google.com/maps?q=${encodeURIComponent
 
 export const IMAGES = {
   hero: {
-    src: "/images/hero.jpg",
+    src: "https://image.qwenlm.ai/generated-images/9235067e-3936-40c3-bb33-a86bfa87e1d0/_result.png",
     alt: "Xícaras de café servidas no balcão de madeira da Império Cafeteria",
   },
   cafes: {
-    src: "/images/cafes.jpg",
+    src: "https://image.qwenlm.ai/generated-images/6d3b7d94-436d-4ee0-95f4-74549339b362/_result.png",
     alt: "Espresso, cappuccino, chá gelado e coquetel servidos no balcão",
   },
   salgados: {
-    src: "/images/salgados.jpg",
+    src: "https://image.qwenlm.ai/generated-images/612f36f8-59d4-43d7-8e7b-ef4eaaa61bd7/_result.png",
     alt: "Coxinhas, empadas, pão de queijo e fatia de torta sobre tábua de madeira",
   },
   espaco: {
-    src: "/images/espaco.jpg",
+    src: "https://image.qwenlm.ai/generated-images/78ed6f8a-f7bc-42cd-8b95-5bff09a9c87c/_result.png",
     alt: "Cliente trabalhando no notebook em uma mesa, com família ao fundo",
   },
   sobre: {
-    src: "/images/sobre.jpg",
+    src: "https://image.qwenlm.ai/generated-images/16fc9f2c-d94e-4c4f-9af5-d40c63072d4d/_result.png",
     alt: "Salão da Império Cafeteria ao entardecer, com mesas ocupadas e luz quente",
   },
 };
