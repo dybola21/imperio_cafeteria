@@ -212,6 +212,31 @@ export function IconArrowUpRight(props: P) {
   );
 }
 
+/* Mascote do agente de IA — xícara com carinha e vapor */
+export function IconCafezinho(props: P) {
+  return (
+    <svg viewBox="0 0 32 32" aria-hidden="true" {...stroke} strokeWidth={1.9} {...props}>
+      <path className="steam-line" d="M12.5 6.8c0-1.2 1-1.4 1-2.6" />
+      <path className="steam-line" d="M17 6.8c0-1.2 1-1.4 1-2.6" />
+      <path d="M8 11h15v5.5a6.5 6.5 0 0 1-6.5 6.5h-2A6.5 6.5 0 0 1 8 16.5Z" />
+      <path d="M23 12.5h1.5a2.8 2.8 0 0 1 0 5.6h-2.2" />
+      <circle cx="13" cy="15.4" r="0.95" fill="currentColor" stroke="none" />
+      <circle cx="18" cy="15.4" r="0.95" fill="currentColor" stroke="none" />
+      <path d="M13.6 18.1c.7 1 3.1 1 3.8 0" />
+      <path d="M6.5 26.5h18" />
+    </svg>
+  );
+}
+
+export function IconSend(props: P) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" {...stroke} {...props}>
+      <path d="M20.5 3.5 3.5 10.6l6.7 2.7 2.7 7.2Z" />
+      <path d="M20.5 3.5 10.2 13.3" />
+    </svg>
+  );
+}
+
 export function IconArrowDown(props: P) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" {...stroke} {...props}>

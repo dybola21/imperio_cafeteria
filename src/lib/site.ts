@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
 
-/* ------------------------------------------------------------------ */
-/*  Dados reais da Império Cafeteria                                   */
-/* ------------------------------------------------------------------ */
-
 export const INSTAGRAM_URL = "https://instagram.com/imperio_salgaderiaecafeteria";
 export const INSTAGRAM_HANDLE = "@imperio_salgaderiaecafeteria";
 
@@ -11,33 +7,60 @@ export const ADDRESS_LINE_1 = "Av. Joaquim da Costa Lima, 10101 — Loja 3";
 export const ADDRESS_LINE_2 = "Parque Veneza, Belford Roxo — RJ";
 export const ADDRESS_ZIP = "CEP 26172-255";
 
-export const MAP_EMBED_URL =
-  "https://www.google.com/maps?q=Av.+Joaquim+da+Costa+Lima,+10101+-+Loja+3+-+Parque+Veneza,+Belford+Roxo+-+RJ,+26172-255&z=16&output=embed";
-
-export const MAP_DIRECTIONS_URL =
-  "https://www.google.com/maps/dir/?api=1&destination=Av.+Joaquim+da+Costa+Lima,+10101+-+Loja+3+-+Parque+Veneza,+Belford+Roxo+-+RJ,+26172-255";
-
 export const RATING = 4.6;
 export const REVIEW_COUNT = 81;
 
-export const OPEN_HOUR = 7;
-export const CLOSE_HOUR = 23;
+export const OPEN_HOUR = 7; // 07:00
+export const CLOSE_HOUR = 23; // 23:00
+
+/* Webhook do Cafezinho — Agente de IA da Império Café */
+export const CAFEZINHO_WEBHOOK_URL =
+  "https://man.noticiasnatela.blog/webhook/8aecbedc-aaa4-49f9-b206-6b335ce6fae1";
+
+export const MAP_DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+  "Av. Joaquim da Costa Lima, 10101 - Loja 3 - Parque Veneza, Belford Roxo - RJ, 26172-255",
+)}`;
+
+export const MAP_EMBED_URL = `https://www.google.com/maps?q=${encodeURIComponent(
+  "Av. Joaquim da Costa Lima, 10101 - Loja 3 - Parque Veneza, Belford Roxo - RJ, 26172-255",
+)}&output=embed&hl=pt-BR`;
+
+export const IMAGES = {
+  hero: {
+    src: "/images/hero.jpg",
+    alt: "Xícaras de café servidas no balcão de madeira da Império Cafeteria",
+  },
+  cafes: {
+    src: "/images/cafes.jpg",
+    alt: "Espresso, cappuccino, chá gelado e coquetel servidos no balcão",
+  },
+  salgados: {
+    src: "/images/salgados.jpg",
+    alt: "Coxinhas, empadas, pão de queijo e fatia de torta sobre tábua de madeira",
+  },
+  espaco: {
+    src: "/images/espaco.jpg",
+    alt: "Cliente trabalhando no notebook em uma mesa, com família ao fundo",
+  },
+  sobre: {
+    src: "/images/sobre.jpg",
+    alt: "Salão da Império Cafeteria ao entardecer, com mesas ocupadas e luz quente",
+  },
+};
 
 export const NAV_LINKS = [
   { label: "Destaques", href: "#destaques" },
   { label: "Sobre", href: "#sobre" },
   { label: "Depoimentos", href: "#depoimentos" },
   { label: "Onde estamos", href: "#onde-estamos" },
-] as const;
+];
 
 export const TICKER_HERO = [
   "Aberto todos os dias",
   "07:00 — 23:00",
-  "Café passado na hora",
-  "Salgado saindo quente",
-  "Doces & tortas da casa",
-  "Climatizado",
-  "Delivery em Belford Roxo",
+  "Espresso na hora",
+  "Salgados fresquinhos",
+  "Belford Roxo · RJ",
 ];
 
 export const TICKER_SERVICES = [
@@ -47,10 +70,6 @@ export const TICKER_SERVICES = [
   "Entrega sem contato",
   "Segunda a domingo · 07:00–23:00",
 ];
-
-/* ------------------------------------------------------------------ */
-/*  Depoimentos (avaliações reais do Google)                           */
-/* ------------------------------------------------------------------ */
 
 export type Testimonial = {
   name: string;
@@ -86,134 +105,95 @@ export const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
-/* ------------------------------------------------------------------ */
-/*  Fotos                                                              */
-/* ------------------------------------------------------------------ */
-
-export const IMAGES = {
-  hero: {
-    src: "https://image.qwenlm.ai/generated-images/8c5ec54a-ca06-48e4-9ff6-b03e58f6099c/_result.png",
-    alt: "Balcão da Império Cafeteria com barista finalizando um café coado na hora, sob luz quente de fim de tarde",
-  },
-  cafes: {
-    src: "https://image.qwenlm.ai/generated-images/d8760312-f251-46a1-8360-690be3a8051c/_result.png",
-    alt: "Espresso, cappuccino com latte art, café gelado, chá e um coquetel sobre o balcão de madeira",
-  },
-  salgados: {
-    src: "https://image.qwenlm.ai/generated-images/33554507-6e86-46ba-a958-fce34c0af836/_result.png",
-    alt: "Coxinhas, empadas, pão de queijo, fatia de torta e brigadeiros servidos sobre tábua rústica",
-  },
-  ambiente: {
-    src: "https://image.qwenlm.ai/generated-images/c6c8afe2-e528-4e48-8e00-d78699e479df/_result.png",
-    alt: "Salão climatizado da cafeteria com cliente trabalhando no notebook e família conversando ao fundo",
-  },
-  sobre: {
-    src: "https://image.qwenlm.ai/generated-images/53608e45-0864-4206-9d72-f3584f4177d8/_result.png",
-    alt: "Vista ampla do salão da Império Cafeteria ao anoitecer, com mesas ocupadas, luminárias de latão e vitrine de salgados",
-  },
-};
-
-/* ------------------------------------------------------------------ */
-/*  Destaques (ziguezague)                                             */
-/* ------------------------------------------------------------------ */
-
 export type Highlight = {
-  icon: "cup" | "pastry" | "sofa";
+  id: string;
   label: string;
   title: string;
   text: string;
+  img: { src: string; alt: string };
   chips: string[];
   cornerTag: string;
-  img: { src: string; alt: string };
+  icon: "cup" | "pastry" | "sofa";
   imageSide: "left" | "right";
 };
 
 export const HIGHLIGHTS: Highlight[] = [
   {
-    icon: "cup",
+    id: "cafes",
     label: "Cafés & bebidas",
-    title: "Do espresso da manhã ao brinde da noite.",
-    text: "Café de alta qualidade passado na hora: espresso encorpado, coado na medida, cappuccino cremoso e as bebidas geladas que salvam a tarde. Tem chás, sucos e — quando o dia pede — coquetéis e bebidas alcoólicas para fechar a noite no balcão.",
-    chips: ["Espresso", "Cappuccino", "Coado", "Chás", "Geladas", "Coquetéis"],
-    cornerTag: "Extração na hora",
+    title: "Do espresso ao brinde da noite",
+    text: "Cafés de alta qualidade tirados na hora, chás, coquetéis e bebidas alcoólicas para quando o fim de tarde pede um gole a mais.",
     img: IMAGES.cafes,
+    chips: ["Espresso", "Cappuccino", "Coado na hora", "Chás", "Coquetéis", "Bebidas geladas"],
+    cornerTag: "Bar & balcão",
+    icon: "cup",
     imageSide: "left",
   },
   {
-    icon: "pastry",
+    id: "salgados",
     label: "Salgados & doces",
-    title: "Salgado quente saindo o dia inteiro.",
-    text: "Salgaderia de verdade: coxinha crocante, empada que desmancha, esfiha e pão de queijo saindo do forno e da fritura sem parar. De manhã, café da manhã completo; à tarde, lanche com sobremesa, torta na fatia e porções para dividir no meio da mesa.",
-    chips: ["Coxinha", "Empadas", "Pão de queijo", "Café da manhã", "Tortas", "Porções"],
-    cornerTag: "Fornada fresca",
+    title: "Salgaderia de mão cheia",
+    text: "Salgados crocantes saindo ao longo do dia, sobremesas, café da manhã reforçado, lanches e porções para dividir — ou não.",
     img: IMAGES.salgados,
+    chips: ["Salgados", "Sobremesas", "Café da manhã", "Lanches", "Porções"],
+    cornerTag: "Fornada do dia",
+    icon: "pastry",
     imageSide: "right",
   },
   {
-    icon: "sofa",
+    id: "espaco",
     label: "Espaço para você ficar",
-    title: "Chegou, sentou, ficou.",
-    text: "Ambiente climatizado, mesas para grupos grandes e clima de casa: bom para a família — com cadeirão e menu infantil —, para o papo comprido com amigos e para quem quer trabalhar no notebook com um bom café do lado. Casa acessível para cadeirantes.",
-    chips: ["Climatizado", "Bom para grupos", "Menu infantil", "Cadeirão", "Notebook bem-vindo", "Acessível"],
-    cornerTag: "Climatizado",
-    img: IMAGES.ambiente,
+    title: "Chegou? Pode ficar",
+    text: "Ambiente climatizado, bom para grupos e para a família — com cadeiras altas e menu infantil para os pequenos. Wi‑Fi e tomadas para quem vem de notebook; casa acessível para todos.",
+    img: IMAGES.espaco,
+    chips: ["Climatizado", "Grupos", "Família", "Menu infantil", "Trabalho remoto", "Acessível"],
+    cornerTag: "Climatizado · Wi‑Fi",
+    icon: "sofa",
     imageSide: "left",
   },
 ];
 
-/* ------------------------------------------------------------------ */
-/*  Serviços (Sobre)                                                   */
-/* ------------------------------------------------------------------ */
-
-export type Service = {
-  icon: "cloche" | "bag" | "speed" | "shield";
-  title: string;
-  desc: string;
-};
-
-export const SERVICES: Service[] = [
+export const SERVICES = [
   {
-    icon: "cloche",
+    icon: "cloche" as const,
     title: "Consumo no local",
-    desc: "Sente, peça e fique à vontade — a casa é sua das sete às vinte e três.",
+    desc: "Mesas confortáveis, ambiente climatizado e o pedido chegando quentinho na mesa.",
   },
   {
-    icon: "bag",
+    icon: "bag" as const,
     title: "Retirada no balcão",
-    desc: "Pediu, passou, levou: seu pedido sai quente e embalado na hora.",
+    desc: "Peça pelo Instagram e passe aqui: é chegar, pegar e seguir o dia.",
   },
   {
-    icon: "speed",
+    icon: "speed" as const,
     title: "Delivery",
-    desc: "O café e o salgado chegam quentinhos na sua porta, em Belford Roxo e região.",
+    desc: "O café e o salgado vão até você, em Belford Roxo e região.",
   },
   {
-    icon: "shield",
+    icon: "shield" as const,
     title: "Entrega sem contato",
-    desc: "Da cozinha até a sua mão, com segurança do começo ao fim.",
+    desc: "Prefere assim? A gente deixa na porta, com todo o cuidado.",
   },
 ];
 
-/* ------------------------------------------------------------------ */
-/*  Horário vivo — a tese da marca                                     */
-/* ------------------------------------------------------------------ */
+/** Aberto todos os dias, das 07:00 às 23:00 — sem exceção. */
+export function useOpenStatus(): { open: boolean; label: string } {
+  const [status, setStatus] = useState<{ open: boolean; label: string }>(() => compute());
 
-export function useOpenStatus() {
-  const [now, setNow] = useState(() => new Date());
+  function compute() {
+    const now = new Date();
+    const minutes = now.getHours() * 60 + now.getMinutes();
+    const open = minutes >= OPEN_HOUR * 60 && minutes < CLOSE_HOUR * 60;
+    return {
+      open,
+      label: open ? "Aberto agora · fecha às 23:00" : "Fechado no momento · abre às 07:00",
+    };
+  }
 
   useEffect(() => {
-    const id = window.setInterval(() => setNow(new Date()), 30_000);
+    const id = window.setInterval(() => setStatus(compute()), 60_000);
     return () => window.clearInterval(id);
   }, []);
 
-  const hour = now.getHours() + now.getMinutes() / 60;
-  const open = hour >= OPEN_HOUR && hour < CLOSE_HOUR;
-
-  const label = open
-    ? "Aberto agora · fecha às 23:00"
-    : hour < OPEN_HOUR
-      ? "Fechado · abre hoje às 07:00"
-      : "Fechado · abre amanhã às 07:00";
-
-  return { open, label };
+  return status;
 }
