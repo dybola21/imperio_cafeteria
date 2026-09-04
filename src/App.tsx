@@ -6,6 +6,7 @@ import { About } from "./components/About";
 import { Testimonials } from "./components/Testimonials";
 import { Location } from "./components/Location";
 import { Footer } from "./components/Footer";
+import { Cafezinho } from "./components/Cafezinho";
 import { TICKER_HERO, TICKER_SERVICES } from "./lib/site";
 
 export default function App() {
@@ -35,6 +36,9 @@ export default function App() {
       </main>
 
       <Footer />
+
+      {/* Cafezinho — Agente de IA da Império Café */}
+      <Cafezinho />
     </div>
   );
 }

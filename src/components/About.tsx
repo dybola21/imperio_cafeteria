@@ -22,7 +22,7 @@ export function About() {
               src={IMAGES.sobre.src}
               alt={IMAGES.sobre.alt}
               loading="lazy"
-              className="h-full w-full object-cover"
+              className="h-full w-full bg-mocha object-cover"
             />
             <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-roast/70 to-transparent" aria-hidden="true" />
             <p className="absolute bottom-6 left-6 flex items-center gap-2 rounded-full bg-roast/85 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-parchment">
